@@ -25,24 +25,27 @@ class SmsBroadcastReceiver: BroadcastReceiver() {
                     val messageBody = smsMessage.messageBody
                     val otp = extractOtp(messageBody)
                     if (otp.isNotEmpty()) {
-                        Log.d("SmsReceiver", "OTP extracted: $otp")
+                        Log.d(this::class.simpleName, "OTP extracted: $otp")
 
-                        val sharedPreferences = context?.getSharedPreferences("Settings@gibotp", Context.MODE_PRIVATE)
-                        val isBackgroundServiceEnabled = sharedPreferences?.getBoolean("background_service", false) ?: false
+                        val sharedPreferences = context?.getSharedPreferences(Tokens.sp, Context.MODE_PRIVATE)
+                        val isSendOtpEnabled = sharedPreferences?.getBoolean(Tokens.spSendOtp, Tokens.defaultSendOtp)?: false
+                        val isBackgroundServiceEnabled = sharedPreferences?.getBoolean(Tokens.spBackgroundService, Tokens.defaultBackgroundService)?: false
 
                         // If App is running in background, check if switch is enabled
                         if (!isAppInForeground(context)) {
-                            if (isBackgroundServiceEnabled) {
+                            if (isSendOtpEnabled && isBackgroundServiceEnabled) {
                                 sendOtpToBackground(context, otp)
                             }
                         } else {
                             // App is running in the foreground
-                            val localIntent = Intent("otp_received")
+                            val localIntent = Intent(Tokens.intentOtpReceived)
                             localIntent.putExtra("otp", otp)
                             context?.let {
                                 LocalBroadcastManager.getInstance(it).sendBroadcast(localIntent)
                             }
-                            sendOtpToBackground(context, otp)
+                            if (isSendOtpEnabled) {
+                                sendOtpToBackground(context, otp)
+                            }
                         }
                     }
                 }
@@ -51,7 +54,13 @@ class SmsBroadcastReceiver: BroadcastReceiver() {
     }
 
     private fun extractOtp(message: String): String {
-        val pattern = Pattern.compile("(\\d{4,6})")  // Assuming OTP is 4-6 digits
+        // NOTE: Here it is assumed that OTP is any number ranging from 4-6 digits
+        // TODO: This is not foolproof, as we are not aware about the format of OTP messages.
+        //  For example we cannot parse OTP if it is belonging to any of the following formats:
+        //  1. 111-111 or 111 111 (or any other delimiter)
+        //  2. one one one one one one (otp in words)
+        //  3. ABC11A (alphanumeric)
+        val pattern = Pattern.compile("(\\d{4,6})")
         val matcher = pattern.matcher(message)
         return if (matcher.find()) matcher.group(0) ?: "" else ""
     }

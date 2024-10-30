@@ -18,7 +18,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ip_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="10.0.2.2" />
@@ -36,7 +35,6 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/port_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="3000" />
@@ -44,20 +42,36 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/endpoint_text_field"
+        android:id="@+id/otp_endpoint_text_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:hint="Remote Server Endpoint"
+        android:hint="Remote Server OTP Endpoint"
         app:layout_constraintTop_toBottomOf="@id/port_text_field"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/endpoint_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="receive_otp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/register_device_endpoint_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="Remote Server Register Device Endpoint"
+        app:layout_constraintTop_toBottomOf="@id/otp_endpoint_text_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="register_device" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +82,7 @@
         android:textStyle="italic"
         android:textColor="@color/dark_gray"
         android:text="Save before testing the server"
-        app:layout_constraintTop_toBottomOf="@id/endpoint_text_field"
+        app:layout_constraintTop_toBottomOf="@id/register_device_endpoint_text_field"
         android:layout_marginTop="20dp"
         android:gravity="center"/>
 
@@ -106,6 +120,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Send OTP to remote server"
+        app:layout_constraintTop_toTopOf="@id/send_otp_switch"
+        app:layout_constraintBottom_toBottomOf="@id/send_otp_switch"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="30dp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/send_otp_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/background_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp" />
 
     <Button
         android:id="@+id/save_button"

@@ -12,3 +12,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Not generated
+app/google-services.json
